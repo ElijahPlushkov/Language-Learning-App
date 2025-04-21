@@ -3,7 +3,7 @@ const decks = [];
 function addNewDeck() {
     const deckForm = document.querySelector(".deck-form");
     deckForm.classList.toggle("d-none");
-};    
+};
 
 function Deck(name) {
     this.name = name;
@@ -32,111 +32,81 @@ function createDeck() {
 
     document.querySelector(".deck-name-input").value = "";
 
+    addNewCard(deck);
+    createFlashCard(deck);
+};
+
+function addNewCard(deck) {
     const addNewCard = deck.querySelector(".add-new-card");
     addNewCard.addEventListener("click", () => {
         const newCardForm = deck.querySelector(".card-form");
         newCardForm.classList.remove("d-none");
     });
-
-    const createFlashCard = deck.querySelector(".create-card");
-    createFlashCard.addEventListener("click", () => {
-            const question = deck.querySelector(".card-question-input").value;
-            const answer = deck.querySelector(".card-answer-input").value;
-            const cardDisplay = deck.querySelector(".card-display");
-            const newCardForm = deck.querySelector(".card-form");
-        
-            if (!question || !answer) {
-                alert("please fill both fileds");
-                return;
-            }
-        
-            const newCard = new Card(question, answer);
-            cards.push(newCard);
-        
-            const cardElement = document.createElement("div");
-            cardElement.classList.add("card");
-            cardElement.dataset.id = newCard.id;
-        
-            cardElement.innerHTML = `
-                <div class="card-body">
-                <div class="card-front">
-                <p class="card-text">${newCard.question}</p>
-                <button class="show-answer">Show Answer</button>
-                </div>
-                <div class="card-back d-none">  
-                <p class="card-text">${newCard.answer}</p>
-                </div> 
-                <div class="card-actions">
-                    <button class="edit-card btn btn-success">Edit</button>
-                    <button class="delete-card btn btn-warning">Delete</button>
-                </div>
-                </div>`;
-        
-            cardDisplay.appendChild(cardElement);
-        
-            deck.querySelector(".card-question-input").value = "";
-            deck.querySelector(".card-answer-input").value = "";
-            newCardForm.classList.add("d-none");
-        
-            setupCardEvents(cardElement);
-    });
-};
+}
 
 const cards = [];
 
 function Card(question, answer) {
-  this.question = question;
-  this.answer = answer;
-  this.id = Date.now();
+    this.question = question;
+    this.answer = answer;
+    this.id = Date.now();
 }
 
-// function createFlashCard() {
-//     const question = document.querySelector(".card-question-input").value;
-//     const answer = document.querySelector(".card-answer-input").value;
-//     const cardDisplay = document.querySelector(".card-display");
-//     const newCardForm = document.querySelector(".card-form");
+function createFlashCard(deck) {
+    const createCard = deck.querySelector(".create-card");
+    createCard.addEventListener("click", () => {
 
-//     if (!question || !answer) {
-//         alert("please fill both fileds");
-//         return;
-//     }
+        const question = deck.querySelector(".card-question-input").value;
+        const answer = deck.querySelector(".card-answer-input").value;
+        const cardDisplay = deck.querySelector(".card-display");
+        const newCardForm = deck.querySelector(".card-form");
 
-//     const newCard = new Card(question, answer);
-//     cards.push(newCard);
+        if (!question || !answer) {
+            alert("please fill both fileds");
+            return;
+        }
 
-//     const cardElement = document.createElement("div");
-//     cardElement.classList.add("card");
-//     cardElement.dataset.id = newCard.id;
+        const newCard = new Card(question, answer);
+        cards.push(newCard);
 
-//     cardElement.innerHTML = `
-//         <div class="card-body">
-//         <div class="card-front">
-//         <p class="card-text">${newCard.question}</p>
-//         <button class="show-answer">Show Answer</button>
-//         </div>
-//         <div class="card-back d-none">  
-//         <p class="card-text">${newCard.answer}</p>
-//         </div> 
-//         <div class="card-actions">
-//             <button class="edit-card btn btn-success">Edit</button>
-//             <button class="delete-card btn btn-warning">Delete</button>
-//         </div>
-//         </div>`;
+        const cardElement = document.createElement("div");
+        cardElement.classList.add("card");
+        cardElement.dataset.id = newCard.id;
 
-//     cardDisplay.appendChild(cardElement);
+        cardElement.innerHTML = `
+        <div class="card-body">
+        <div class="card-front">
+        <p class="card-text">${newCard.question}</p>
+        <button class="show-answer">Show Answer</button>
+        </div>
+        <div class="card-back d-none">  
+        <p class="card-text">${newCard.answer}</p>
+        </div> 
+        <div class="card-actions">
+            <button class="edit-card btn btn-success">Edit</button>
+            <button class="delete-card btn btn-warning">Delete</button>
+        </div>
+        </div>`;
 
-//     document.querySelector(".card-question-input").value = "";
-//     document.querySelector(".card-answer-input").value = "";
-//     newCardForm.classList.add("d-none");
+        cardDisplay.appendChild(cardElement);
 
-//     setupCardEvents(cardElement);
-// };
+        document.querySelector(".card-question-input").value = "";
+        document.querySelector(".card-answer-input").value = "";
+        newCardForm.classList.add("d-none");
 
-function setupCardEvents(cardElement) {
+        showCard(cardElement);
+        deleteCard(cardElement)
+        editCard(cardElement)
+    });
+};
+
+function showCard(cardElement) {
     cardElement.querySelector(".show-answer").addEventListener("click", function () {
         cardElement.querySelector(".card-back").classList.toggle("d-none");
     });
+}
 
+function deleteCard(cardElement) {
     cardElement.querySelector(".delete-card").addEventListener("click", function () {
         const cardId = parseInt(cardElement.dataset.id);
         const cardIndex = cards.findIndex(card => card.id === cardId);
@@ -146,7 +116,9 @@ function setupCardEvents(cardElement) {
             cardElement.remove();
         }
     });
+}
 
+function editCard(cardElement) {
     cardElement.querySelector(".edit-card").addEventListener("click", function () {
         const cardId = parseInt(cardElement.dataset.id);
         const card = cards.find(card => card.id === cardId);
@@ -160,7 +132,7 @@ function setupCardEvents(cardElement) {
 
         const editForm = document.createElement("div");
         editForm.id = "editForm";
-        
+
         editForm.innerHTML = `
         <div id="editForm" class="">
         <input type="text" id="editQuestion" value="${card.question}">
@@ -174,7 +146,7 @@ function setupCardEvents(cardElement) {
         editForm.querySelector(".save-edit").addEventListener("click", function () {
             editQuestion = document.getElementById("editQuestion").value;
             editAnswer = document.getElementById("editAnswer").value;
-            
+
             card.question = editQuestion;
             card.answer = editAnswer;
 
