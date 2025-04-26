@@ -26,13 +26,15 @@
 <div id="decksDisplay">
     <template id="deckTemplate">
         <div class="deck d-none" id="1">
-            <button class="deck-toggle deck-name btn btn-warning" onclick="">Deck Name</button>
+            <button class="deck-toggle deck-name btn btn-warning">Deck Name</button>
+            <button class="edit-deck btn btn-danger">Edit</button>
+            <button class="delete-deck btn btn-dark">Delete</button>
             <div class="deck-content">
-                <button class="btn btn-primary add-new-card" onclick="">+ Add New Card</button>
+                <button class="btn btn-primary add-new-card">+ Add New Card</button>
                 <div class="card-form d-none">
                     <input type="text" class="card-question-input" placeholder="Question">
                     <input type="text" class="card-answer-input" placeholder="Answer">
-                    <button class="create-card" onclick="">Create Card</button>
+                    <button class="create-card">Create Card</button>
                 </div>
                 <div class="card-display"></div>
             </div>

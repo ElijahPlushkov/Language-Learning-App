@@ -32,9 +32,72 @@ function createDeck() {
 
     document.querySelector(".deck-name-input").value = "";
 
+    editDeck(deck);
+    deleteDeck(deck);
     addNewCard(deck);
     createFlashCard(deck);
 };
+
+function editDeck(deck) {
+    deck.querySelector(".edit-deck").addEventListener("click", function () {
+        const deckId = parseInt(deck.dataset.id);
+        const deckObj = decks.find(deck => deck.id === deckId);
+
+        if (!deck) {
+            return;
+        }
+
+        const editForm = document.createElement("div");
+        editForm.id = "editForm";
+
+        editForm.innerHTML = `
+        <div id="editForm" class="">
+        <input type="text" id="newDeckName" value="">
+        <button class="save-edit">Save</button>
+        <button class="cancel-edit">Cancel</button>
+        </div>
+        `;
+
+        deck.appendChild(editForm);
+
+        editForm.querySelector(".save-edit").addEventListener("click", function () {
+            const newDeckName = document.getElementById("newDeckName").value;
+            deck.querySelector(".deck-name").textContent = newDeckName;
+
+            editForm.remove();
+        });
+
+        editForm.querySelector('.cancel-edit').addEventListener('click', () => {
+            editForm.remove();
+            cardElement.querySelector('.cancel').classList.remove('d-none');
+        });
+    });
+}
+
+function deleteDeck(deck) {
+    deck.querySelector(".delete-deck").addEventListener("click", function() {
+        const deckId = parseInt(deck.id);
+        console.log(deck.id);
+        const deckIndex = decks.findIndex(deck => deck.id === deckId);
+
+        if (deckIndex > -1) {
+            decks.splice(deckIndex, 1);
+            deck.remove();
+        }
+
+        console.log("Deck ID:", deckId);
+console.log("Found index:", deckIndex); 
+    });
+    // cardElement.querySelector(".delete-card").addEventListener("click", function () {
+    //     const cardId = parseInt(cardElement.dataset.id);
+    //     const cardIndex = cards.findIndex(card => card.id === cardId);
+
+    //     if (cardIndex > -1) {
+    //         cards.splice(cardIndex, 1);
+    //         cardElement.remove();
+    //     }
+    // });
+}
 
 function addNewCard(deck) {
     const addNewCard = deck.querySelector(".add-new-card");
@@ -144,8 +207,8 @@ function editCard(cardElement) {
         cardElement.appendChild(editForm);
 
         editForm.querySelector(".save-edit").addEventListener("click", function () {
-            editQuestion = document.getElementById("editQuestion").value;
-            editAnswer = document.getElementById("editAnswer").value;
+            const editQuestion = document.getElementById("editQuestion").value;
+            const editAnswer = document.getElementById("editAnswer").value;
 
             card.question = editQuestion;
             card.answer = editAnswer;
