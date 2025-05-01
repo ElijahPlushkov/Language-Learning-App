@@ -10,7 +10,6 @@ if ($stmt->rowCount() > 0) {
     die;
 }
 
-// Добавим пользователя в базу
 $stmt = pdo()->prepare("INSERT INTO `users` (`username`, `password`) VALUES (:username, :password)");
 $stmt->execute([
     'username' => $_POST['username'],

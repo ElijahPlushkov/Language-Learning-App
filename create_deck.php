@@ -79,7 +79,7 @@ $decks = $sql->fetchAll(PDO::FETCH_ASSOC);
                 data-bs-target="#addCard">+ Add New Card</button>
 
                 <div class="card-display">
-
+                    <?php include 'display_cards.php'?>
                 </div>
 
             </div>
@@ -111,7 +111,6 @@ $decks = $sql->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <script>
-    // Set the deck ID when a button is clicked
     document.querySelectorAll('.add-new-card').forEach(btn => {
         btn.addEventListener('click', () => {
             document.getElementById('deckId').value = btn.dataset.deckId;

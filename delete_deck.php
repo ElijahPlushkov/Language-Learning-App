@@ -11,8 +11,8 @@ if (isset($_POST['delete_deck'])) {
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$deckId]);
 
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
-    exit();
+//    header('Location: ' . $_SERVER['HTTP_REFERER']);
+//    exit();
 }
 
 ?>

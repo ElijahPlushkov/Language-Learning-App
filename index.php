@@ -22,7 +22,7 @@ if (check_auth()) {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 ?>
-<?php if ($user) { ?>
+<?php if ($user) : ?>
 
     <h1>Greetings, <?=htmlspecialchars($user['username'])?>!</h1>
 
@@ -32,7 +32,7 @@ if (check_auth()) {
         <button type="submit" class="btn btn-primary">Logout</button>
     </form>
 
-<?php } else { ?>
+<?php else : ?>
 
 <h1 class="mb-5">Registration</h1>
 
@@ -52,7 +52,7 @@ if (check_auth()) {
 </form>
 </div>
 
-<?php } ?>
+<?php endif; ?>
 
 </body>
 </html>
