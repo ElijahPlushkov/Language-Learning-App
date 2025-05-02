@@ -78,14 +78,35 @@ $decks = $sql->fetchAll(PDO::FETCH_ASSOC);
                 data-bs-toggle="modal"
                 data-bs-target="#addCard">+ Add New Card</button>
 
-                <div class="card-display">
-                    <?php include 'display_cards.php'?>
-                </div>
+                <div class="card-display" id="cardsForDeck<?= $deck['deck_id']?>">
+                    <?php
+                    $stmt = $pdo->prepare("SELECT * FROM cards WHERE deck_id = ?");
+                    $stmt->execute([$deck['deck_id']]);
+                    $cards = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    if (empty($cards)) : ?>
 
+                    <div class="alert alert-info mt-2">No cards in this deck yet.</div>
+
+                    <?php else : ?>
+
+                    <?php foreach ($cards as $card) : ?>
+                            <div class="card mb-2" id="card-<?= $card['card_id'] ?>">
+                                <div class="card-body">
+                                    <div class="card-front">
+                                        <p><?= htmlspecialchars($card['front_text']) ?></p>
+                                        <button class="show-answer btn btn-sm btn-primary">Show Answer</button>
+                                    </div>
+                                    <div class="card-back d-none">
+                                        <p><?= htmlspecialchars($card['back_text']) ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
             </div>
-        </div>
-        <?php include 'edit_deck.php'; include 'delete_deck.php'; endforeach; ?>
-</div>
+            <?php include 'edit_deck.php'; include 'delete_deck.php'; endforeach; ?>
+                </div>
 
 <div class="modal fade" id="addCard" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">

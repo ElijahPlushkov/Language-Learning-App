@@ -11,7 +11,7 @@ $cards = $sql->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
-<?php foreach ($cards as $card) : ?>
+<?php foreach ($cards as $card) : if ($card['deck_id'] === $deckId) : ?>
 <div id="card-<?= htmlspecialchars($card['card_id']) ?>">
 <div class="card-body">
     <div class="card-front">
@@ -27,8 +27,7 @@ $cards = $sql->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 </div>
-<?php endforeach; ?>
 
-<?php if (empty($cards)): ?>
+<?php else : ?>
     <div class="alert alert-info">No cards in this deck yet.</div>
-<?php endif; ?>
+<?php endif; endforeach;?>
