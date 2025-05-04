@@ -106,6 +106,11 @@ $decks = $sql->fetchAll(PDO::FETCH_ASSOC);
                                 data-bs-target="#addCard">
                             <i class="fas fa-plus"></i> Add New Card
                         </button>
+
+                        <button type="button" class="btn btn-success btn-lg toggle-card-display"
+                                data-deck-id="<?= $deck['deck_id'] ?>"
+                        <i class="fa-solid fa-square-minus"></i> Hide Cards
+                        </button>
                     </div>
 
                     <div class="card-display" id="cardsForDeck<?= $deck['deck_id']?>">
@@ -191,6 +196,23 @@ $decks = $sql->fetchAll(PDO::FETCH_ASSOC);
             document.getElementById('deckId').value = btn.dataset.deckId;
         });
     });
+
+    // document.querySelectorAll(".toggle-display").forEach(btn => {
+    //     btn.addEventListener("click", () => {
+    //         document.querySelector(".card-display").classList.toggle("d-none");
+    //     });
+    // });
+
+    document.addEventListener("click", function(event) {
+        if (event.target.classList.contains("toggle-card-display")) {
+            const toggleDisplay = event.target;
+            const cardDisplay = toggleDisplay.closest(".deck").querySelector(".card-display");
+
+            cardDisplay.classList.toggle("d-none");
+            toggleDisplay.textContent = cardDisplay.classList.contains("d-none")
+            ? "Show Cards" : "Hide Cards";
+        }
+    })
 
     document.addEventListener("click", function(event) {
         if (event.target.classList.contains("show-answer")) {
