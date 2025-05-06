@@ -57,6 +57,10 @@ if (check_auth()) {
                             </div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary">Register</button>
+                                <br>
+
+
+                                <a class="btn btn-outline-primary" href="login.php">Login</a>
                             </div>
                         </form>
                     </div>

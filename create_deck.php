@@ -5,6 +5,7 @@
 require_once 'boot.php';
 
 if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
     exit;
 }
 
@@ -16,12 +17,13 @@ if (!check_auth()) {
 $pdo = new PDO('mysql:dbname=flashcard_app; host=127.0.0.1', 'root', '');
 
 $userId = $_SESSION['user_id'];
-$deckName = $_POST['deck_name'];
 
 if (isset($_POST['create-deck'])) {
+    $deckName = $_POST['deck_name'];
     $sql = ("INSERT INTO `decks` (`user_id`, `deck_name`) VALUE (?,?)");
     $query = $pdo->prepare($sql);
     $query->execute([$userId, $deckName]);
+
 }
 
 $sql = $pdo->prepare("SELECT * FROM `decks` WHERE user_id = ?");
@@ -148,7 +150,69 @@ $decks = $sql->fetchAll(PDO::FETCH_ASSOC);
                                         </div>
                                     </div>
                                 </div>
-                            <?php include "delete_card.php"; include "edit_card.php"; endforeach; ?>
+
+                                <!--DELETE CARD-->
+                                <div class="modal fade" id="deleteCardModal<?=$card['card_id']?>" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form method="POST" action="delete_card.php">
+                                                <input type="hidden" name="card_id" value="<?=$card['card_id']?>">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Delete Card</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        <h5>Delete <?= $card['front_text']?>?</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" name="delete_card" class="btn btn-primary">Delete</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--EDIT CARD-->
+                                <div class="modal fade" id="editCardModal<?=$card['card_id']?>" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <form method="POST" action="edit_card.php">
+                                                <input type="hidden" name="card_id" value="<?=$card['card_id']?>">
+                                                <div class="modal-header bg-light">
+                                                    <h5 class="modal-title fs-5">
+                                                        <i class="fas fa-edit me-2"></i>Edit Deck
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        <label for="editCardFront<?=$card['front_text']?>" class="form-label fw-semibold">Question</label>
+                                                        <input type="text" name="newCardFront" class="form-control form-control-lg"
+                                                               id="editCardFront<?=$card['card_id']?>"
+                                                               value="<?=htmlspecialchars($card['front_text'])?>">
+
+                                                        <label for="editCardBack<?=$card['back_text']?>" class="form-label fw-semibold">Answer</label>
+                                                        <input type="text" name="newCardBack" class="form-control form-control-lg"
+                                                               id="editCardBack<?=$card['card_id']?>"
+                                                               value="<?=htmlspecialchars($card['back_text'])?>">
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                                        <i class="fas fa-times me-1"></i> Cancel
+                                                    </button>
+                                                    <button type="submit" name="editCard" class="btn btn-primary">
+                                                        <i class="fas fa-save me-1"></i> Save Changes
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -157,7 +221,7 @@ $decks = $sql->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 
-
+<!--ADD CARD-->
 <div class="modal fade" id="addCard" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -190,46 +254,8 @@ $decks = $sql->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 
-<script>
-    document.querySelectorAll('.add-new-card').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.getElementById('deckId').value = btn.dataset.deckId;
-        });
-    });
-
-    // document.querySelectorAll(".toggle-display").forEach(btn => {
-    //     btn.addEventListener("click", () => {
-    //         document.querySelector(".card-display").classList.toggle("d-none");
-    //     });
-    // });
-
-    document.addEventListener("click", function(event) {
-        if (event.target.classList.contains("toggle-card-display")) {
-            const toggleDisplay = event.target;
-            const cardDisplay = toggleDisplay.closest(".deck").querySelector(".card-display");
-
-            cardDisplay.classList.toggle("d-none");
-            toggleDisplay.textContent = cardDisplay.classList.contains("d-none")
-            ? "Show Cards" : "Hide Cards";
-        }
-    })
-
-    document.addEventListener("click", function(event) {
-        if (event.target.classList.contains("show-answer")) {
-            const toggleButton = event.target;
-            const card = toggleButton.closest(".card");
-            const back = card.querySelector(".card-back");
-
-            back.classList.toggle("d-none");
-            toggleButton.textContent = back.classList.contains("d-none")
-            ? "Show Answer" : "Hide Answer";
-        }
-    });
-
-
-</script>
-
 <script src="createDeck.js"></script>
+<script src="deck_actions.js"></script>
 </body>
 
 </html>
