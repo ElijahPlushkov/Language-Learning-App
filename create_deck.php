@@ -75,11 +75,9 @@ $decks = $sql->fetchAll(PDO::FETCH_ASSOC);
                     <div class="d-flex justify-content-between align-items-center">
                         <h2 class="h4 mb-0 deck-name"><?= htmlspecialchars($deck['deck_name']) ?></h2>
                         <div>
-                            <button type="button" class="btn btn-sm btn-dark me-2"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="">
+                            <a href="revise_deck.php?deck_id=<?=$deck['deck_id']?>" class="btn btn-sm btn-dark me-2">
                                 <i class="fa-solid fa-book"></i> Revise
-                            </button>
+                            </a>
                             <button type="button" class="btn btn-sm btn-info me-2"
                                     data-bs-toggle="modal"
                                     data-bs-target="">
