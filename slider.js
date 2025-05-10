@@ -4,7 +4,10 @@ let cardIndex = 0;
 document.addEventListener('DOMContentLoaded', showCard);
 
 function showCard(index) {
-    
+
+    const firstCard = cards[0];
+    firstCard.querySelector(".prev").classList.add("disabled");
+
     if (index === cards.length - 1) {
         exitReviseMode();
         restartDeck();
@@ -12,13 +15,15 @@ function showCard(index) {
         currentCard.querySelector(".next").classList.add("d-none");
         currentCard.querySelector(".prev").classList.add("d-none");
     }
+
     else if (index < 0) {
         cardIndex = cards.length - 1;
     }
+
     cards.forEach(card => {
         card.classList.add("d-none");
     });
-    cards[cardIndex].classList.remove("d-none");
+    cards[cardIndex].classList.remove("d-none");  
 }
 
 function exitReviseMode() {

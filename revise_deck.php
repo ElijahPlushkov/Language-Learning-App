@@ -11,7 +11,7 @@ $stmt = $pdo->prepare("SELECT * FROM decks WHERE deck_id=?");
 $stmt->execute([$deck_id]);
 $deck = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$stmt = $pdo->prepare("SELECT * FROM cards WHERE deck_id = ?");
+$stmt = $pdo->prepare("SELECT * FROM cards WHERE deck_id = ? ORDER BY RAND()");
 $stmt->execute([$deck['deck_id']]);
 $cards = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -51,8 +51,5 @@ $cards = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </a>
 </div>
 
-<script id="cards-data" type="application/json">
-  <?= json_encode($cards, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT) ?>
-</script>
 <script src="slider.js"></script>
 <script src="deck_actions.js"></script>
